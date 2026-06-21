@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Arval AutoPoster — Developer Documentation</title>
+<style>
+  :root {
+    --ink:        #0f0f0f;
+    --ink-soft:   #3a3a3a;
+    --ink-muted:  #777;
+    --rule:       #e0ddd8;
+    --page:       #faf9f7;
+    --card:       #ffffff;
+    --kenya-red:  #cc0000;
+    --kenya-grn:  #006600;
+    --accent:     #cc0000;
+    --step-bg:    #fff8f5;
+    --code-bg:    #1a1a1a;
+    --code-text:  #e8e3dc;
+    --tag-blue:   #dbeafe;
+    --tag-blue-t: #1d4ed8;
+    --tag-green:  #dcfce7;
+    --tag-green-t:#15803d;
+    --tag-red:    #fee2e2;
+    --tag-red-t:  #b91c1c;
+    --tag-amber:  #fef3c7;
+    --tag-amber-t:#92400e;
+    --tag-purple: #ede9fe;
+    --tag-purple-t:#6d28d9;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--page);
+    color: var(--ink);
+    font-family: 'Georgia', serif;
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* ── TOP MASTHEAD ── */
+  .masthead {
+    background: var(--ink);
+    color: #fff;
+    padding: 0;
+    border-bottom: 4px solid var(--kenya-red);
+  }
+  .masthead-inner {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 36px 32px 28px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .masthead-flag {
+    display: flex;
+    gap: 0;
+    height: 6px;
+    width: 60px;
+    margin-bottom: 14px;
+    border-radius: 1px;
+    overflow: hidden;
+  }
+  .flag-stripe { flex: 1; }
+  .masthead h1 {
+    font-family: 'Georgia', serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+    color: #fff;
+  }
+  .masthead h1 span { color: var(--kenya-red); }
+  .masthead-sub {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: #999;
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .masthead-meta {
+    text-align: right;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: #888;
+    line-height: 1.8;
+    flex-shrink: 0;
+  }
+  .masthead-meta strong { color: #ccc; }
+
+  /* ── NAV BAR ── */
+  .nav {
+    background: #181818;
+    border-bottom: 1px solid #333;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-inner {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav a {
+    color: #bbb;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .nav a:hover { color: #fff; border-color: var(--kenya-red); }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+  }
+
+  /* ── SECTION HEADINGS ── */
+  .section {
+    margin-top: 64px;
+  }
+  .section-label {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--kenya-red);
+    margin-bottom: 8px;
+  }
+  .section > h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.3px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 10px;
+    margin-bottom: 24px;
+  }
+  .section > p {
+    color: var(--ink-soft);
+    max-width: 720px;
+    margin-bottom: 16px;
+  }
+
+  /* ── OVERVIEW CARDS ── */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 28px;
+  }
+  .overview-card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--kenya-red);
+    padding: 20px 18px;
+    border-radius: 0 0 4px 4px;
+  }
+  .overview-card .oc-label {
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 6px;
+  }
+  .overview-card .oc-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+    font-family: Arial, sans-serif;
+  }
+  .overview-card .oc-desc {
+    font-size: 13px;
+    color: var(--ink-muted);
+    margin-top: 4px;
+    font-family: Arial, sans-serif;
+    line-height: 1.4;
+  }
+
+  /* ── PIPELINE DIAGRAM ── */
+  .pipeline {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 32px 0;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+  .pipe-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100px;
+  }
+  .pipe-box {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--kenya-red);
+    padding: 12px 10px;
+    text-align: center;
+    border-radius: 0 0 3px 3px;
+    width: 100%;
+  }
+  .pipe-box .pb-num {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--kenya-red);
+    letter-spacing: 1px;
+  }
+  .pipe-box .pb-label {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+  .pipe-arrow {
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+    color: var(--ink-muted);
+    font-size: 18px;
+    padding-top: 20px;
+    flex-shrink: 0;
+  }
+
+  /* ── STEP BLOCKS ── */
+  .step-block {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--kenya-red);
+    margin-bottom: 32px;
+    border-radius: 0 4px 4px 0;
+    overflow: hidden;
+  }
+  .step-header {
+    background: var(--step-bg);
+    padding: 18px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .step-num {
+    font-family: Arial, sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--kenya-red);
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: 36px;
+  }
+  .step-title-wrap h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .step-fn {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: var(--ink-muted);
+    background: #f0ede8;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+  .step-body {
+    padding: 20px 24px;
+  }
+  .step-body p {
+    color: var(--ink-soft);
+    margin-bottom: 14px;
+    max-width: 700px;
+  }
+
+  /* ── CODE BLOCKS ── */
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 18px 20px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 16px 0;
+  }
+  pre .cm  { color: #888; font-style: italic; }   /* comment */
+  pre .kw  { color: #f9a03f; }                    /* keyword */
+  pre .st  { color: #a8d8a8; }                    /* string */
+  pre .nm  { color: #8ec9f7; }                    /* name/var */
+  pre .nu  { color: #f08080; }                    /* number */
+  pre .op  { color: #d4c5a9; }                    /* operator */
+  pre .hl  { background: #2a2a1a; display: block; margin: -2px -20px; padding: 2px 20px; }
+
+  code {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    background: #f0ede8;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #b91c1c;
+  }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    border-left: 3px solid;
+    padding: 14px 18px;
+    margin: 18px 0;
+    border-radius: 0 4px 4px 0;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+  }
+  .callout-tip    { border-color: var(--kenya-grn); background: #f0fdf4; color: #14532d; }
+  .callout-warn   { border-color: #d97706;          background: #fffbeb; color: #78350f; }
+  .callout-info   { border-color: #2563eb;          background: #eff6ff; color: #1e3a8a; }
+  .callout-danger { border-color: var(--kenya-red); background: #fff1f1; color: #7f1d1d; }
+  .callout strong { display: block; margin-bottom: 4px; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; }
+
+  /* ── DATA FLOW TABLE ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    margin: 16px 0;
+  }
+  th {
+    background: var(--ink);
+    color: #fff;
+    text-align: left;
+    padding: 10px 14px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    color: var(--ink-soft);
+  }
+  tr:nth-child(even) td { background: #f9f8f6; }
+  td code { font-size: 12px; }
+
+  /* ── TAGS ── */
+  .tag {
+    display: inline-block;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin: 2px 3px 2px 0;
+    text-transform: uppercase;
+  }
+  .tag-blue   { background: var(--tag-blue);   color: var(--tag-blue-t); }
+  .tag-green  { background: var(--tag-green);  color: var(--tag-green-t); }
+  .tag-red    { background: var(--tag-red);    color: var(--tag-red-t); }
+  .tag-amber  { background: var(--tag-amber);  color: var(--tag-amber-t); }
+  .tag-purple { background: var(--tag-purple); color: var(--tag-purple-t); }
+
+  /* ── FLOW ARROWS (inline) ── */
+  .data-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 20px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+  }
+  .df-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+  }
+  .df-label {
+    width: 160px;
+    flex-shrink: 0;
+    padding: 10px 14px;
+    background: var(--ink);
+    color: #ccc;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #333;
+    font-family: Arial, sans-serif;
+  }
+  .df-arrow {
+    width: 32px;
+    flex-shrink: 0;
+    background: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--kenya-red);
+    font-size: 16px;
+    border-bottom: 1px solid #333;
+  }
+  .df-value {
+    flex: 1;
+    padding: 10px 14px;
+    background: var(--code-bg);
+    color: var(--code-text);
+    border-bottom: 1px solid #2a2a2a;
+    line-height: 1.5;
+    word-break: break-word;
+  }
+
+  /* ── IMAGE PIPELINE VISUAL ── */
+  .img-layers {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 18px 0;
+  }
+  .img-layer {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+  }
+  .img-layer.blocked { opacity: 0.55; background: #fff8f8; border-color: #fecaca; }
+  .img-layer.active  { background: #f0fdf4; border-color: #86efac; }
+  .img-layer.skipped { opacity: 0.4; background: #f9fafb; }
+  .layer-badge {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  .badge-blocked { background: #fee2e2; color: #b91c1c; }
+  .badge-active  { background: #dcfce7; color: #15803d; }
+  .badge-skip    { background: #f3f4f6; color: #9ca3af; }
+  .layer-text strong { display: block; color: var(--ink); margin-bottom: 2px; }
+  .layer-text span   { color: var(--ink-muted); }
+
+  /* ── ENV TABLE ── */
+  .env-table td:first-child { font-family: 'Courier New', monospace; font-size: 12px; color: var(--kenya-red); width: 220px; }
+  .env-table td:last-child  { color: var(--ink-muted); font-size: 13px; }
+
+  /* ── CONSTANTS TABLE ── */
+  .const-table td:first-child  { font-family: 'Courier New', monospace; font-size: 12px; color: #2563eb; width: 220px; }
+  .const-table td:nth-child(2) { font-family: 'Courier New', monospace; font-size: 12px; width: 120px; }
+
+  /* ── FOOTER ── */
+  .doc-footer {
+    background: var(--ink);
+    color: #777;
+    text-align: center;
+    padding: 32px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    margin-top: 80px;
+    border-top: 3px solid var(--kenya-red);
+  }
+  .doc-footer strong { color: #ccc; }
+
+  /* ── UTILITY ── */
+  .mt8  { margin-top: 8px; }
+  .mt16 { margin-top: 16px; }
+  .mt24 { margin-top: 24px; }
+  hr { border: none; border-top: 1px solid var(--rule); margin: 28px 0; }
+
+  @media (max-width: 680px) {
+    .masthead-inner { flex-direction: column; align-items: flex-start; }
+    .masthead-meta  { text-align: left; }
+    .main { padding: 0 16px 60px; }
+    .overview-grid { grid-template-columns: 1fr 1fr; }
+    .pipeline { flex-wrap: nowrap; }
+    .df-label { width: 110px; }
+    .step-header { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ MASTHEAD ═══════════ -->
+<header class="masthead">
+  <div class="masthead-inner">
+    <div>
+      <div class="masthead-flag">
+        <div class="flag-stripe" style="background:#006600;"></div>
+        <div class="flag-stripe" style="background:#cc0000;"></div>
+        <div class="flag-stripe" style="background:#000;"></div>
+        <div class="flag-stripe" style="background:#cc0000;"></div>
+        <div class="flag-stripe" style="background:#006600;"></div>
+      </div>
+      <h1>Arval AutoPoster<br><span>Developer Documentation</span></h1>
+      <div class="masthead-sub">posting_engine.py — Step-by-Step Guide</div>
+    </div>
+    <div class="masthead-meta">
+      <strong>Version</strong> 2.0<br>
+      <strong>Runtime</strong> Python 3.11+<br>
+      <strong>Platform</strong> Termux / PythonAnywhere<br>
+      <strong>Updated</strong> June 2026
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#overview">Overview</a>
+    <a href="#setup">Setup</a>
+    <a href="#step1">1 · Schedule</a>
+    <a href="#step2">2 · Feed Scan</a>
+    <a href="#step3">3 · Duplicate Guard</a>
+    <a href="#step4">4 · URL Resolution</a>
+    <a href="#step5">5 · Article Fetch</a>
+    <a href="#step6">6 · Image Pipeline</a>
+    <a href="#step7">7 · Gemini Generation</a>
+    <a href="#step8">8 · Content Parsing</a>
+    <a href="#step9">9 · API Submission</a>
+    <a href="#step10">10 · Post-Publish</a>
+    <a href="#cli">CLI Flags</a>
+    <a href="#log">Log Schema</a>
+    <a href="#troubleshoot">Troubleshoot</a>
+  </div>
+</nav>
+
+<div class="main">
+
+<!-- ═══════════ OVERVIEW ═══════════ -->
+<section class="section" id="overview">
+  <div class="section-label">Introduction</div>
+  <h2>What This Engine Does</h2>
+  <p>
+    <code>posting_engine.py</code> is a fully autonomous news blog autoposter built for
+    <strong>Arval Blog News</strong>. It runs continuously on Termux (Android), scans Kenya
+    and World RSS feeds, pulls the raw article for context, generates an original 900–1,300-word
+    article using Gemini AI written in a Kenyan journalist voice, attaches an image, and publishes
+    directly to <code>arvalblognews.online</code> via the blog API. Everything — scheduling,
+    duplicate detection, image sourcing, model rotation, log integrity — is handled internally.
+    No manual input is required once the engine is running.
+  </p>
+
+  <div class="overview-grid">
+    <div class="overview-card">
+      <div class="oc-label">Daily Limit</div>
+      <div class="oc-value">24</div>
+      <div class="oc-desc">Articles per calendar day across 3 posting windows</div>
+    </div>
+    <div class="overview-card">
+      <div class="oc-label">Posts Per Run</div>
+      <div class="oc-value">2</div>
+      <div class="oc-desc">Default; override with <code>--posts N</code></div>
+    </div>
+    <div class="overview-card">
+      <div class="oc-label">Feed Sources</div>
+      <div class="oc-value">16</div>
+      <div class="oc-desc">8 Kenya + 8 World RSS feeds</div>
+    </div>
+    <div class="overview-card">
+      <div class="oc-label">Gemini Models</div>
+      <div class="oc-value">4</div>
+      <div class="oc-desc">Rotate on quota hit or refusal</div>
+    </div>
+    <div class="overview-card">
+      <div class="oc-label">Image Layers</div>
+      <div class="oc-value">3</div>
+      <div class="oc-desc">RSS → og:image → Wikimedia fallback</div>
+    </div>
+    <div class="overview-card">
+      <div class="oc-label">Run Interval</div>
+      <div class="oc-value">25–40m</div>
+      <div class="oc-desc">Randomised to avoid detection patterns</div>
+    </div>
+  </div>
+
+  <h3 class="mt24" style="font-size:17px; margin-bottom:12px;">Full pipeline at a glance</h3>
+  <div class="pipeline">
+    <div class="pipe-step">
+      <div class="pipe-box"><div class="pb-num">01</div><div class="pb-label">Schedule Gate</div></div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="pipe-box"><div class="pb-num">02</div><div class="pb-label">Feed Scan</div></div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="pipe-box"><div class="pb-num">03</div><div class="pb-label">Dup Check</div></div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="pipe-box"><div class="pb-num">04</div><div class="pb-label">URL Resolve</div></div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="pipe-box"><div class="pb-num">05</div><div class="pb-label">Article Fetch</div></div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="pipe-box"><div class="pb-num">06</div><div class="pb-label">Image Pipeline</div></div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="pipe-box"><div class="pb-num">07</div><div class="pb-label">AI Generate</div></div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="pipe-box"><div class="pb-num">08</div><div class="pb-label">Parse Output</div></div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="pipe-box"><div class="pb-num">09</div><div class="pb-label">Post to Blog</div></div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-step">
+      <div class="pipe-box"><div class="pb-num">10</div><div class="pb-label">IndexNow + Log</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SETUP ═══════════ -->
+<section class="section" id="setup">
+  <div class="section-label">Getting Started</div>
+  <h2>Setup &amp; Configuration</h2>
+
+  <p>The engine reads all secrets from environment variables (or a <code>.env</code> file via python-dotenv). It will refuse to start if the two required keys are missing.</p>
+
+  <h3 style="font-size:16px; margin: 24px 0 12px;">Required environment variables</h3>
+  <table class="env-table">
+    <tr><th>Variable</th><th>Required</th><th>Description</th></tr>
+    <tr><td>GEMINI_API_KEY</td><td><span class="tag tag-red">Yes</span></td><td>Google AI Studio API key for Gemini content generation</td></tr>
+    <tr><td>ARVAL_API_KEY</td><td><span class="tag tag-red">Yes</span></td><td>Secret key for the Arval Blog News <code>/api/posts</code> endpoint</td></tr>
+    <tr><td>INDEXNOW_KEY</td><td><span class="tag tag-amber">Optional</span></td><td>Defaults to <code>arvalblognews</code> if not set</td></tr>
+  </table>
+
+  <h3 style="font-size:16px; margin: 24px 0 12px;">Installation (Termux)</h3>
+<pre>pkg install python
+pip install requests feedparser google-generativeai python-dotenv Pillow
+
+<span class="cm"># Create your .env file</span>
+echo "GEMINI_API_KEY=your_key_here" >> .env
+echo "ARVAL_API_KEY=your_key_here"  >> .env
+
+<span class="cm"># Run the engine</span>
+python posting_engine.py</pre>
+
+  <h3 style="font-size:16px; margin: 24px 0 12px;">Key constants (all in one place, easy to tune)</h3>
+  <table class="const-table">
+    <tr><th>Constant</th><th>Default</th><th>What it controls</th></tr>
+    <tr><td>DAILY_LIMIT</td><td>24</td><td>Maximum articles published per calendar day</td></tr>
+    <tr><td>POSTS_PER_RUN</td><td>2</td><td>Articles attempted each time <code>run()</code> fires</td></tr>
+    <tr><td>MIN_WORD_COUNT</td><td>400</td><td>Any Gemini output shorter than this is discarded</td></tr>
+    <tr><td>MAX_IMAGE_BYTES</td><td>2 MB</td><td>Stream size cap — aborts download if exceeded</td></tr>
+    <tr><td>MAX_IMAGE_WIDTH</td><td>1,400 px</td><td>Pillow resizes wider images before upload</td></tr>
+    <tr><td>REQUEST_TIMEOUT</td><td>12 s</td><td>Applied to every HTTP call in the engine</td></tr>
+    <tr><td>SIMILARITY_THRESHOLD</td><td>0.60</td><td>Jaccard score above which a story is treated as a duplicate</td></tr>
+    <tr><td>INTERVAL_MIN/MAX_SECS</td><td>25–40 min</td><td>Random sleep between posting cycles</td></tr>
+  </table>
+
+  <h3 style="font-size:16px; margin: 24px 0 12px;">Posting windows (EAT = UTC+3)</h3>
+  <table>
+    <tr><th>Window</th><th>Hours (EAT)</th><th>Max posts</th><th>Why</th></tr>
+    <tr><td>Morning</td><td>06:00 – 09:00</td><td>8</td><td>Commuter traffic spike in Nairobi</td></tr>
+    <tr><td>Afternoon</td><td>12:00 – 14:00</td><td>6</td><td>Lunch break readers</td></tr>
+    <tr><td>Evening</td><td>19:00 – 22:00</td><td>10</td><td>Highest engagement window</td></tr>
+  </table>
+</section>
+
+<!-- ═══════════ STEP 1 ═══════════ -->
+<section class="section" id="step1">
+  <div class="section-label">Step 01</div>
+  <h2>Schedule &amp; Quota Gate</h2>
+
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div class="step-title-wrap">
+        <h3>Is it safe to post right now?</h3>
+        <span class="step-fn">run() → is_posting_window() → check_daily_limits()</span>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Before touching any feed, the engine checks three gates in order. All three must pass or the cycle exits immediately.</p>
+
+      <table>
+        <tr><th>#</th><th>Gate</th><th>Pass condition</th><th>Fail behaviour</th></tr>
+        <tr>
+          <td>1</td>
+          <td>Daily quota</td>
+          <td>Posts today &lt; <code>DAILY_LIMIT</code> (24)</td>
+          <td>Sleeps until midnight EAT, then resets</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Posting window</td>
+          <td>Current EAT hour falls within a configured window</td>
+          <td>Logs "Outside windows. Next: Evening in ~Xh" and exits run</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Window cap</td>
+          <td>Posts in <em>this</em> window today &lt; window's <code>max_posts</code></td>
+          <td>Logs "Afternoon cap reached (6/6)" and exits run</td>
+        </tr>
+      </table>
+
+      <p class="mt16">The number of articles to attempt is calculated as the minimum of three values:</p>
+<pre><span class="nm">to_post</span> <span class="op">=</span> min(
+    <span class="nm">POSTS_PER_RUN</span>,      <span class="cm"># 2 (or --posts override)</span>
+    <span class="nm">remaining_quota</span>,    <span class="cm"># DAILY_LIMIT − count_today</span>
+    <span class="nm">window_left</span>         <span class="cm"># window.max_posts − window_count_today</span>
+)</pre>
+
+      <div class="callout callout-info">
+        <strong>How the engine tracks time</strong>
+        All time checks use <code>datetime.utcnow() + timedelta(hours=3)</code> to get EAT (East Africa Time). The log stores a <code>"date"</code> field as <code>YYYY-MM-DD</code> — when this doesn't match today, the daily count resets to 0 automatically.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STEP 2 ═══════════ -->
+<section class="section" id="step2">
+  <div class="section-label">Step 02</div>
+  <h2>RSS Feed Scan</h2>
+
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div class="step-title-wrap">
+        <h3>Collect story candidates from all 16 feeds</h3>
+        <span class="step-fn">collect_candidates() → detect_category() → extract_feed_image()</span>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>All 16 feeds (8 Kenya + 8 World) are scanned in sequence with <code>feedparser.parse()</code>. Each entry that passes deduplication becomes a candidate tuple.</p>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">What a raw feedparser entry looks like</h4>
+      <div class="data-flow">
+        <div class="df-row">
+          <div class="df-label">entry.title</div>
+          <div class="df-arrow">→</div>
+          <div class="df-value">"KRA misses revenue target by Ksh 47 billion in first quarter"</div>
+        </div>
+        <div class="df-row">
+          <div class="df-label">entry.link</div>
+          <div class="df-arrow">→</div>
+          <div class="df-value">"https://news.google.com/rss/articles/CBMi..." &nbsp;<em style="color:#888">(redirect, not the real URL yet)</em></div>
+        </div>
+        <div class="df-row">
+          <div class="df-label">entry.summary</div>
+          <div class="df-arrow">→</div>
+          <div class="df-value">'&lt;img src="https://lh3.googleusercontent.com/abc123..." /&gt;'</div>
+        </div>
+        <div class="df-row">
+          <div class="df-label">entry.media_content</div>
+          <div class="df-arrow">→</div>
+          <div class="df-value">[] &nbsp;<em style="color:#888">(empty on this entry)</em></div>
+        </div>
+      </div>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">Image extraction order — <code>extract_feed_image()</code></h4>
+      <p>Three places are checked in priority order:</p>
+<pre><span class="cm"># Priority 1: media:content tag (common in BBC, Reuters feeds)</span>
+<span class="kw">if</span> entry.media_content <span class="kw">and</span> media_content[<span class="nu">0</span>].get(<span class="st">"url"</span>):
+    <span class="kw">return</span> media_content[<span class="nu">0</span>][<span class="st">"url"</span>]
+
+<span class="cm"># Priority 2: enclosures with image MIME type</span>
+<span class="kw">for</span> enc <span class="kw">in</span> entry.enclosures:
+    <span class="kw">if</span> enc[<span class="st">"type"</span>].startswith(<span class="st">"image/"</span>):
+        <span class="kw">return</span> enc[<span class="st">"href"</span>]
+
+<span class="cm"># Priority 3: &lt;img src="..."&gt; inside the summary HTML</span>
+img_match = re.search(<span class="st">r'&lt;img[^&gt;]+src=["\']([^"\']+)["\']'</span>, summary)
+<span class="kw">if</span> img_match:
+    <span class="kw">return</span> img_match.group(<span class="nu">1</span>)</pre>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">Category detection — score-based keyword matching</h4>
+      <p><code>detect_category()</code> scores each category against the lowercased title. The highest-scoring category wins; falls back to <em>Politics</em> if no keyword matches.</p>
+<pre><span class="cm"># Title: "KRA misses revenue target by Ksh 47 billion in first quarter"</span>
+scores = {
+    <span class="st">"Politics"</span>:  <span class="nu">0</span>,
+    <span class="st">"Business"</span>:  <span class="nu">3</span>,  <span class="cm"># "kra" + "revenue" + "tax" all match</span>
+    <span class="st">"Technology"</span>: <span class="nu">0</span>,
+    <span class="st">"Health"</span>:    <span class="nu">0</span>,
+    <span class="st">"Sports"</span>:    <span class="nu">0</span>,
+    <span class="st">"World News"</span>: <span class="nu">0</span>,
+}
+<span class="cm"># → category = "Business"</span></pre>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">Candidate tuple structure</h4>
+<pre>candidate = (
+    <span class="st">"KRA misses revenue target by Ksh 47 billion in first quarter"</span>,  <span class="cm"># title</span>
+    <span class="st">"https://news.google.com/rss/articles/CBMi..."</span>,                  <span class="cm"># link</span>
+    <span class="st">"Business"</span>,                                                       <span class="cm"># category</span>
+    <span class="st">"https://lh3.googleusercontent.com/abc123..."</span>,                   <span class="cm"># rss image (may be blocked)</span>
+)</pre>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">Pool interleaving</h4>
+      <p>After scanning, Kenya and World candidates are shuffled separately then interleaved so each run naturally alternates regions:</p>
+<pre>interleaved = [kenya[0], world[0], kenya[1], world[1], ...]</pre>
+
+      <div class="callout callout-warn">
+        <strong>Zero-entry warning</strong>
+        If a feed returns 0 entries (network issue or feed down), the engine logs a warning and continues to the next feed rather than crashing. Monitor <code>autoposter.log</code> for repeated warnings on the same feed URL.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STEP 3 ═══════════ -->
+<section class="section" id="step3">
+  <div class="section-label">Step 03</div>
+  <h2>Duplicate Topic Guard</h2>
+
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div class="step-title-wrap">
+        <h3>Block stories that are too similar to recent posts</h3>
+        <span class="step-fn">is_duplicate_topic() → title_similarity()</span>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Before making any network requests for an article, the candidate title is compared against the last 60 posted titles stored in the log. This prevents publishing two articles about the same story on the same day.</p>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">Jaccard similarity calculation</h4>
+      <p>The algorithm strips stop words (including "kenya" / "kenyan") from both titles, computes word sets, then calculates: <strong>|intersection| ÷ |union|</strong>. Any score ≥ 0.60 is blocked.</p>
+
+<pre><span class="cm"># Candidate: "KRA misses revenue target by Ksh 47 billion in first quarter"</span>
+<span class="cm"># Tokens after stop-word removal:</span>
+<span class="nm">A</span> = {<span class="st">"kra"</span>, <span class="st">"misses"</span>, <span class="st">"revenue"</span>, <span class="st">"target"</span>, <span class="st">"ksh"</span>, <span class="st">"47"</span>, <span class="st">"billion"</span>, <span class="st">"first"</span>, <span class="st">"quarter"</span>}
+
+<span class="cm"># Recent post: "Treasury orders budget cuts as KRA collects less than expected"</span>
+<span class="nm">B</span> = {<span class="st">"treasury"</span>, <span class="st">"orders"</span>, <span class="st">"budget"</span>, <span class="st">"cuts"</span>, <span class="st">"kra"</span>, <span class="st">"collects"</span>, <span class="st">"less"</span>, <span class="st">"expected"</span>}
+
+intersection = {<span class="st">"kra"</span>}           <span class="cm"># 1 shared word</span>
+union        = <span class="nu">16</span> unique words   <span class="cm"># A ∪ B</span>
+similarity   = <span class="nu">1</span> / <span class="nu">16</span> = <span class="nu">0.06</span>    <span class="cm"># well below 0.60 → NOT a duplicate</span></pre>
+
+      <div class="callout callout-tip">
+        <strong>Why "kenya" is excluded from stop words for Kenya stories</strong>
+        The default stop list includes "kenya" and "kenyan" — but <em>only</em> for world stories. For stories from Kenya feeds, "kenya" is kept in the token set so that two different Nairobi-centric articles aren't falsely flagged as duplicates of each other purely because both mention Kenya.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STEP 4 ═══════════ -->
+<section class="section" id="step4">
+  <div class="section-label">Step 04</div>
+  <h2>URL Resolution</h2>
+
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">4</div>
+      <div class="step-title-wrap">
+        <h3>Follow Google News redirects to the real article</h3>
+        <span class="step-fn">resolve_google_news_url()</span>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Google News RSS entries use opaque redirect URLs like <code>https://news.google.com/rss/articles/CBMi...</code>. The engine must resolve these to get the actual source URL before fetching article content or attributing the source domain.</p>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">Resolution strategy (HEAD-first)</h4>
+<pre><span class="cm"># Step 1: try a cheap HEAD request (no body downloaded)</span>
+r = requests.head(url, allow_redirects=<span class="kw">True</span>, timeout=<span class="nu">12</span>)
+<span class="kw">if</span> <span class="st">"news.google.com"</span> <span class="kw">not in</span> r.url:
+    <span class="kw">return</span> r.url   <span class="cm"># resolved!</span>
+
+<span class="cm"># Step 2: fallback — some servers reject HEAD, try GET with stream=True</span>
+r = requests.get(url, allow_redirects=<span class="kw">True</span>, stream=<span class="kw">True</span>, timeout=<span class="nu">12</span>)
+r.close()        <span class="cm"># close immediately — we only needed the final URL</span>
+<span class="kw">if</span> <span class="st">"news.google.com"</span> <span class="kw">not in</span> r.url:
+    <span class="kw">return</span> r.url</pre>
+
+      <div class="data-flow" style="margin-top:16px;">
+        <div class="df-row">
+          <div class="df-label">Input</div>
+          <div class="df-arrow">→</div>
+          <div class="df-value">"https://news.google.com/rss/articles/CBMiABC..."</div>
+        </div>
+        <div class="df-row">
+          <div class="df-label">After HEAD</div>
+          <div class="df-arrow">→</div>
+          <div class="df-value">"https://www.standardmedia.co.ke/business/article/2001..."</div>
+        </div>
+        <div class="df-row">
+          <div class="df-label">source_domain</div>
+          <div class="df-arrow">→</div>
+          <div class="df-value">"standardmedia.co.ke" &nbsp;<em style="color:#888">(parsed from netloc, www. stripped)</em></div>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <strong>Non-Google URLs skip this step entirely</strong>
+        <code>resolve_google_news_url()</code> checks for <code>"news.google.com"</code> in the URL first. Direct feeds from Nation Africa (<code>nation.africa</code>) or Standard Media (<code>standardmedia.co.ke</code>) return immediately with no HTTP request made.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STEP 5 ═══════════ -->
+<section class="section" id="step5">
+  <div class="section-label">Step 05</div>
+  <h2>Article Fetch &amp; Context Extraction</h2>
+
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <div class="step-title-wrap">
+        <h3>Download the source article and extract clean text</h3>
+        <span class="step-fn">generate_and_post_article() — article fetch block</span>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>A GET request downloads the full article page HTML. This serves two purposes: finding the article's own <code>og:image</code>, and giving Gemini factual grounding (specific numbers, quotes, names) rather than hallucinating.</p>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">HTML → plain text (3-stage stripping)</h4>
+<pre><span class="cm"># Stage 1: kill all JavaScript blocks</span>
+plain = re.sub(<span class="st">r"&lt;script[^&gt;]*&gt;.*?&lt;/script&gt;"</span>, <span class="st">" "</span>, raw_html, flags=DOTALL)
+
+<span class="cm"># Stage 2: kill all CSS blocks</span>
+plain = re.sub(<span class="st">r"&lt;style[^&gt;]*&gt;.*?&lt;/style&gt;"</span>, <span class="st">" "</span>, plain, flags=DOTALL)
+
+<span class="cm"># Stage 3: strip every remaining HTML tag</span>
+plain = re.sub(<span class="st">r"&lt;[^&gt;]+&gt;"</span>, <span class="st">" "</span>, plain)
+
+<span class="cm"># Collapse whitespace and slice to 3,500 chars</span>
+plain = re.sub(<span class="st">r"\s+"</span>, <span class="st">" "</span>, plain).strip()
+article_context = plain[:<span class="nu">3500</span>]</pre>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">Scraped image extraction — <code>scrape_article_image()</code></h4>
+      <p>Four meta tag patterns are checked in priority order before falling back to the first content <code>&lt;img&gt;</code>:</p>
+
+      <table>
+        <tr><th>#</th><th>Pattern checked</th><th>Example value found</th></tr>
+        <tr><td>1</td><td><code>og:image</code> property (content after)</td><td><code>.../images/kra_hq_nairobi.jpg</code></td></tr>
+        <tr><td>2</td><td><code>og:image</code> property (content before)</td><td>(same, attribute order varies)</td></tr>
+        <tr><td>3</td><td><code>twitter:image</code> name</td><td>Twitter card image</td></tr>
+        <tr><td>4</td><td><code>twitter:image</code> name (content before)</td><td>(same)</td></tr>
+        <tr><td>5</td><td>First <code>&lt;img src="..."&gt;</code> not matching skip list</td><td>Content photo inside article body</td></tr>
+      </table>
+
+      <p class="mt16">Skip list filters out tracking pixels and UI chrome:</p>
+<pre>skip = {<span class="st">"logo"</span>, <span class="st">"icon"</span>, <span class="st">"pixel"</span>, <span class="st">"tracking"</span>, <span class="st">"avatar"</span>, <span class="st">"1x1"</span>, <span class="st">"spinner"</span>, <span class="st">"badge"</span>, <span class="st">"button"</span>}</pre>
+
+      <div class="callout callout-warn">
+        <strong>What happens if the fetch fails</strong>
+        Network errors, paywalls, and 4xx responses are caught silently. The engine logs "Article fetch failed — using headline only" and continues. Gemini will generate the article based on the headline alone, using its own knowledge of current events. The <code>context_block</code> in the prompt changes to: <em>"NOTE: Source article could not be fetched. Draw on your knowledge of current events."</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STEP 6 ═══════════ -->
+<section class="section" id="step6">
+  <div class="section-label">Step 06</div>
+  <h2>Image Pipeline</h2>
+
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">6</div>
+      <div class="step-title-wrap">
+        <h3>Find, download, and optimise the featured image</h3>
+        <span class="step-fn">download_image() → _resize_image_if_needed() → fetch_wikimedia_image()</span>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Three image sources are tried in order. The first that produces a valid, downloadable image wins. Google-hosted URLs are blocked at every layer.</p>
+
+      <div class="img-layers">
+        <div class="img-layer blocked">
+          <div class="layer-badge badge-blocked">✕</div>
+          <div class="layer-text">
+            <strong>Layer 1 — RSS feed image</strong>
+            <span>Blocked if URL contains: <code>lh3.googleusercontent.com</code>, <code>news.google.com</code>, <code>gstatic.com</code>, <code>googleusercontent.com</code>, <code>googleapis.com/news</code>. Google thumbnails are low-res and legally restricted. RSS image from this example was blocked here.</span>
+          </div>
+        </div>
+        <div class="img-layer active">
+          <div class="layer-badge badge-active">✓</div>
+          <div class="layer-text">
+            <strong>Layer 2 — Scraped og:image from article page</strong>
+            <span>Uses the image the source publisher chose for social sharing. <strong>This layer succeeded</strong> in the example: <code>standardmedia.co.ke/images/kra_hq_nairobi.jpg</code></span>
+          </div>
+        </div>
+        <div class="img-layer skipped">
+          <div class="layer-badge badge-skip">3</div>
+          <div class="layer-text">
+            <strong>Layer 3 — Wikimedia Commons</strong>
+            <span>Only reached if Layers 1 and 2 both fail. Extracts 5 meaningful tokens from the title, strips stop words, searches Commons API (<code>list=search</code> in namespace 6). Kenya stories keep "kenya" in the query. Returns thumb URL ≥ 500px wide, JPEG/PNG/WebP only.</span>
+          </div>
+        </div>
+      </div>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">Download safeguards — <code>download_image()</code></h4>
+<pre><span class="cm"># Stream in 16KB chunks, counting bytes</span>
+<span class="kw">for</span> chunk <span class="kw">in</span> r.iter_content(chunk_size=<span class="nu">16384</span>):
+    total += len(chunk)
+    <span class="kw">if</span> total > MAX_IMAGE_BYTES:   <span class="cm"># 2MB hard cap — protects Termux RAM</span>
+        os.unlink(tmp.name)
+        <span class="kw">return</span> <span class="kw">None</span>, <span class="kw">None</span>
+    tmp.write(chunk)
+
+<span class="cm"># Minimum size check — rejects tracking pixels, 1×1 gifs</span>
+<span class="kw">if</span> os.path.getsize(tmp.name) < <span class="nu">5120</span>:   <span class="cm"># &lt; 5KB</span>
+    os.unlink(tmp.name)
+    <span class="kw">return</span> <span class="kw">None</span>, <span class="kw">None</span>
+
+<span class="cm"># MIME type from Content-Type header (not file extension)</span>
+ext = _ext_from_content_type(r.headers.get(<span class="st">"Content-Type"</span>, <span class="st">"image/jpeg"</span>))
+<span class="cm"># Allowed: .jpg .jpeg .png .webp .gif</span>
+
+<span class="cm"># Pillow resize if available</span>
+_resize_image_if_needed(tmp.name)     <span class="cm"># shrinks to ≤ 1400px wide</span>
+
+filename = <span class="st">f"arval_{int(time.time())}{ext}"</span>  <span class="cm"># e.g. arval_1750492449.jpg</span></pre>
+
+      <div class="callout callout-tip">
+        <strong>Pillow is optional but recommended</strong>
+        The engine attempts a silent <code>pip install Pillow</code> at startup if it's not found. Without Pillow, images are uploaded at their original size — which can be 3–5MB for high-res editorial photos. With Pillow, they're resized to 1400×N at quality=85, typically producing files under 200KB. Install with <code>pkg install python-pillow</code> on Termux.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STEP 7 ═══════════ -->
+<section class="section" id="step7">
+  <div class="section-label">Step 07</div>
+  <h2>Gemini Article Generation</h2>
+
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">7</div>
+      <div class="step-title-wrap">
+        <h3>Build the prompt and generate the article</h3>
+        <span class="step-fn">generate_article() → generate_and_post_article() — prompt block</span>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>The engine assembles a structured prompt, calls Gemini with a rotating model pool and randomised temperature, and detects refusals before accepting the output.</p>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">Prompt structure</h4>
+<pre>Blog topic based on this current news event:
+HEADLINE: KRA misses revenue target by Ksh 47 billion in first quarter
+SOURCE: standardmedia.co.ke
+
+ARTICLE CONTENT FROM SOURCE:
+[3,500 chars of stripped article text]
+
+INSTRUCTIONS:
+Write a completely original Kenyan news article of 1000–1100 words
+using the above as your factual foundation. Go deep — add local
+Kenyan context, name real places, quote what ordinary Kenyans are
+saying, and take a clear editorial position. The writing must feel
+like a tired but passionate Nairobi journalist wrote it at 11pm...
+&lt;p style="font-size:12px; color:#999;"&gt;Source: standardmedia.co.ke&lt;/p&gt;</pre>
+
+      <p class="mt16">The word target is randomly chosen from three options each run: <code>"900–1000"</code>, <code>"1000–1100"</code>, <code>"1100–1300"</code>. This prevents all articles being the same length.</p>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">Model rotation &amp; retry logic</h4>
+      <table>
+        <tr><th>Model</th><th>Role</th><th>When rotated away</th></tr>
+        <tr><td><code>gemini-3.1-flash-lite</code></td><td>Primary</td><td>Rate limit (429) or refusal detected</td></tr>
+        <tr><td><code>gemini-3.5-flash</code></td><td>Fallback 1</td><td>Same</td></tr>
+        <tr><td><code>gemini-3-flash</code></td><td>Fallback 2</td><td>Same</td></tr>
+        <tr><td><code>gemini-2.5-flash-lite</code></td><td>Fallback 3</td><td>After all models cycled twice, gives up</td></tr>
+      </table>
+
+      <p class="mt16">On quota hit, exponential backoff fires: <code>min(2^attempts + random(1,4), 60)</code> seconds.</p>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">AI-detection countermeasures</h4>
+      <p>Three mechanisms work together to make the output feel human-written:</p>
+      <p><span class="tag tag-blue">Temperature</span> Randomised between 0.75 and 0.95 per call. Higher = more varied, natural-sounding output.</p>
+      <p><span class="tag tag-green">Banned words</span> The system prompt explicitly prohibits 20+ AI giveaway phrases ("Furthermore", "Delve into", "It is worth noting", "Landscape", etc.).</p>
+      <p><span class="tag tag-purple">Voice rules</span> Swahili phrases mid-sentence, first-person moments ("I called the ministry. Nobody picked up."), Nairobi estate name-drops, and punchy one-line paragraphs are all specified in the system prompt.</p>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">Refusal detection</h4>
+<pre>REFUSAL_SIGNALS = [
+    <span class="st">"i can't"</span>, <span class="st">"i cannot"</span>, <span class="st">"i'm unable"</span>, <span class="st">"as an ai"</span>,
+    <span class="st">"i don't have the ability"</span>, <span class="st">"i must decline"</span>, ...
+]
+<span class="cm"># Checked against the first 500 chars of the response</span>
+<span class="cm"># If matched → rotate model and retry, don't post</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STEP 8 ═══════════ -->
+<section class="section" id="step8">
+  <div class="section-label">Step 08</div>
+  <h2>Content Parsing &amp; Validation</h2>
+
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">8</div>
+      <div class="step-title-wrap">
+        <h3>Extract every component from the raw Gemini response</h3>
+        <span class="step-fn">generate_and_post_article() — parse block</span>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>The raw Gemini response is a single string containing HTML, a meta description comment, and a Quote Card line. Each component is extracted with a dedicated regex.</p>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">What Gemini is expected to return</h4>
+<pre>```html
+&lt;h1 style="..."&gt;KRA Ksh 47 Billion Short: Who Is Keeping The Books?&lt;/h1&gt;
+&lt;p style="..."&gt;Six hundred and thirty billion. That was the number...&lt;/p&gt;
+...
+&lt;footer style="..."&gt;
+  ...
+  &lt;p style="font-size:12px; color:#999;"&gt;Source: standardmedia.co.ke&lt;/p&gt;
+&lt;/footer&gt;
+&lt;!--META-DESCRIPTION:KRA collected Ksh 583 billion against a Ksh 630 billion
+target in Q1, raising questions about fiscal management in Kenya.--&gt;
+```
+Quote Card Text: Forty-seven billion missing and nobody has been arrested.</pre>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">Extraction sequence</h4>
+      <table>
+        <tr><th>What</th><th>Regex</th><th>Fallback</th></tr>
+        <tr>
+          <td>HTML block</td>
+          <td><code>```html\s*(.*?)\s*```</code></td>
+          <td>Bare ``` block, then raw text</td>
+        </tr>
+        <tr>
+          <td>Word count</td>
+          <td>Strip all tags → split → count</td>
+          <td>Discard if &lt; 400 words</td>
+        </tr>
+        <tr>
+          <td>Meta description</td>
+          <td><code>&lt;!--META-DESCRIPTION:(.*?)--&gt;</code></td>
+          <td>Empty string (no meta tag posted)</td>
+        </tr>
+        <tr>
+          <td>Quote Card</td>
+          <td><code>Quote Card Text:\s*(.+?)(?:\n|$)</code></td>
+          <td>None (not logged)</td>
+        </tr>
+        <tr>
+          <td>Article title</td>
+          <td><code>&lt;h1[^&gt;]*&gt;(.*?)&lt;/h1&gt;</code></td>
+          <td><code>"Exposed: The Real Story Behind {source_title}"</code></td>
+        </tr>
+      </table>
+
+      <p class="mt16">After extraction, the <code>&lt;h1&gt;</code> tag is <strong>stripped from content_html</strong> — the blog CMS renders the title separately above the article body, so including it in the content would duplicate it.</p>
+      <p>The <code>&lt;!--META-DESCRIPTION:...--&gt;</code> comment is also stripped from content_html before posting, since it's extracted separately and sent as its own API field.</p>
+
+      <div class="callout callout-danger">
+        <strong>Two reasons an article is discarded here</strong>
+        (1) Word count below <code>MIN_WORD_COUNT</code> (400) — usually means Gemini returned a partial or truncated response. (2) Refusal signals found in the stripped plain text — means the model refused inside an HTML wrapper, which <code>_contains_refusal()</code> catches by checking the plain text too, not just the raw response.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STEP 9 ═══════════ -->
+<section class="section" id="step9">
+  <div class="section-label">Step 09</div>
+  <h2>Blog API Submission</h2>
+
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">9</div>
+      <div class="step-title-wrap">
+        <h3>POST the article and image to arvalblognews.online</h3>
+        <span class="step-fn">generate_and_post_article() — API block</span>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>A human-like delay (3–9 seconds random) fires before the request. Then the API is called with up to 3 retries on server errors.</p>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">Payload fields</h4>
+      <table>
+        <tr><th>Field</th><th>Value (example)</th><th>Type</th></tr>
+        <tr><td><code>title</code></td><td>"KRA Ksh 47 Billion Short: Who Is Keeping The Books?"</td><td>Form field</td></tr>
+        <tr><td><code>content</code></td><td>Full HTML body (h1 stripped, meta comment stripped)</td><td>Form field</td></tr>
+        <tr><td><code>category_name</code></td><td>"Business"</td><td>Form field</td></tr>
+        <tr><td><code>status</code></td><td>"published"</td><td>Form field</td></tr>
+        <tr><td><code>meta_description</code></td><td>"KRA collected Ksh 583 billion against..."</td><td>Form field</td></tr>
+        <tr><td><code>image</code></td><td><code>arval_1750492449.jpg</code> (binary)</td><td>Multipart file</td></tr>
+      </table>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">Two request paths</h4>
+<pre><span class="cm"># Path A: image downloaded successfully — multipart upload</span>
+<span class="kw">with</span> open(image_file_path, <span class="st">"rb"</span>) <span class="kw">as</span> img_f:
+    files = {<span class="st">"image"</span>: (image_filename, img_f, mime_type)}
+    res = requests.post(ARVAL_API_URL,
+        headers={<span class="st">"X-API-Key"</span>: ARVAL_API_KEY},
+        data=payload, files=files, timeout=<span class="nu">50</span>)
+
+<span class="cm"># Path B: image failed — send URL instead (blog fetches it server-side)</span>
+payload[<span class="st">"featured_image_url"</span>] = featured_image_url
+res = requests.post(ARVAL_API_URL,
+    headers={<span class="st">"X-API-Key"</span>: ARVAL_API_KEY},
+    data=payload, timeout=<span class="nu">35</span>)</pre>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">Retry logic on 5xx</h4>
+<pre><span class="kw">for</span> attempt <span class="kw">in</span> range(<span class="nu">1</span>, <span class="nu">4</span>):    <span class="cm"># up to 3 attempts</span>
+    ...
+    <span class="kw">if</span> res.status_code == <span class="nu">201</span>:
+        <span class="kw">break</span>                  <span class="cm"># success</span>
+    <span class="kw">elif</span> res.status_code >= <span class="nu">500</span>:
+        time.sleep(<span class="nu">5</span> * attempt)  <span class="cm"># 5s, 10s, 15s</span>
+    <span class="kw">else</span>:
+        <span class="kw">break</span>                  <span class="cm"># 4xx — no point retrying</span></pre>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">Canonical URL construction (on 201)</h4>
+<pre>cat_slug       = <span class="st">"business"</span>   <span class="cm"># category_name.lower().replace(" ", "-")</span>
+canonical_slug = slugify(title) <span class="cm"># mirrors slugify() in routes.py exactly</span>
+               = <span class="st">"kra-ksh-47-billion-short-who-is-keeping-the-books"</span>
+live_url       = <span class="st">f"https://www.arvalblognews.online/news/{cat_slug}/{canonical_slug}"</span></pre>
+
+      <div class="callout callout-tip">
+        <strong>Temp image cleanup always runs</strong>
+        The <code>/tmp/tmpXk8z2q.jpg</code> file is deleted in a <code>finally</code>-style block after the API call, whether the request succeeded or failed. Temp files never accumulate on device storage.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STEP 10 ═══════════ -->
+<section class="section" id="step10">
+  <div class="section-label">Step 10</div>
+  <h2>Post-Publish Actions</h2>
+
+  <div class="step-block">
+    <div class="step-header">
+      <div class="step-num">10</div>
+      <div class="step-title-wrap">
+        <h3>Notify, index, and commit to log</h3>
+        <span class="step-fn">send_termux_notification() → submit_to_indexnow() → commit_to_log() → save_log()</span>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Three things fire in fixed order after a 201 response. All are non-blocking — failures are logged as warnings and never prevent the engine from continuing.</p>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">1. Termux notification</h4>
+<pre>termux-notification \
+  --title  "✅ Arval: KRA Ksh 47 Billion Short..." \
+  --content "Business | 1063w | /news/business/kra-ksh-47..." \
+  --id      1000 \
+  --priority high \
+  --sound \
+  --vibrate 200,100,200</pre>
+      <p>Notification IDs increment with each post (<code>_notif_id</code>), so articles don't overwrite each other on the notification shade. If <code>termux-notification</code> isn't installed, the error is caught silently.</p>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">2. IndexNow submission</h4>
+<pre>POST https://api.indexnow.org/indexnow
+{
+  <span class="st">"host"</span>:        <span class="st">"www.arvalblognews.online"</span>,
+  <span class="st">"key"</span>:         <span class="st">"arvalblognews"</span>,
+  <span class="st">"keyLocation"</span>: <span class="st">"https://www.arvalblognews.online/static/arvalblognews.txt"</span>,
+  <span class="st">"urlList"</span>:     [<span class="st">"https://www.arvalblognews.online/news/business/kra-ksh-47..."</span>]
+}</pre>
+      <p>Notifies Bing and Yandex for near-immediate crawl. IndexNow failures are non-fatal — the post is already live regardless.</p>
+
+      <h4 style="font-size:14px; font-weight:700; margin: 18px 0 10px;">3. Atomic log write — <code>commit_to_log()</code> → <code>save_log()</code></h4>
+      <p>Every successful post updates seven fields in the JSON log:</p>
+      <table>
+        <tr><th>Field</th><th>Update</th></tr>
+        <tr><td><code>count</code></td><td>Incremented by 1</td></tr>
+        <tr><td><code>date</code></td><td>Set to today's date (YYYY-MM-DD)</td></tr>
+        <tr><td><code>processed_urls</code></td><td>Source Google News URL appended (prevents reprocessing)</td></tr>
+        <tr><td><code>posted_titles</code></td><td>Final article title appended (used for duplicate detection)</td></tr>
+        <tr><td><code>window_counts</code></td><td><code>"2026-06-21_Morning"</code> counter incremented</td></tr>
+        <tr><td><code>quote_cards</code></td><td>Quote Card text + ISO timestamp appended</td></tr>
+        <tr><td><code>run_stats</code></td><td>Object with ts, title, words, model, image flag, window appended</td></tr>
+      </table>
+
+      <p class="mt16">The write is atomic — JSON is serialised to <code>.json.tmp</code> first, then <code>os.replace()</code> renames it. The previous log is backed up to <code>.json.bak</code> before every write. If the main log is corrupted on next load, the backup is tried automatically.</p>
+
+      <div class="callout callout-info">
+        <strong>processed_urls is never cleared between days</strong>
+        The daily count resets at midnight, but <code>processed_urls</code> persists across days. This means the engine will never republish the same source article on a different day, even if it becomes trending again. The list is trimmed to a maximum of 600 entries (oldest removed first) to prevent the log file from growing indefinitely.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CLI FLAGS ═══════════ -->
+<section class="section" id="cli">
+  <div class="section-label">Reference</div>
+  <h2>CLI Flags</h2>
+  <p>All flags are parsed at startup via <code>argparse</code> and stored in <code>ARGS</code>.</p>
+  <table>
+    <tr><th>Flag</th><th>Type</th><th>What it does</th></tr>
+    <tr>
+      <td><code>--dry-run</code></td>
+      <td>Boolean</td>
+      <td>Generates content and logs everything, but does NOT call the blog API, send notifications, or submit to IndexNow. URL is still committed to the log so it isn't reprocessed.</td>
+    </tr>
+    <tr>
+      <td><code>--once</code></td>
+      <td>Boolean</td>
+      <td>Runs exactly one posting cycle then exits. Useful for cron job integration or manual triggers.</td>
+    </tr>
+    <tr>
+      <td><code>--posts N</code></td>
+      <td>Integer</td>
+      <td>Overrides <code>POSTS_PER_RUN</code> for this session only. <code>--posts 5</code> will attempt up to 5 articles per cycle.</td>
+    </tr>
+    <tr>
+      <td><code>--test-image URL</code></td>
+      <td>String</td>
+      <td>Downloads the given image URL through the full pipeline (stream cap, MIME check, Pillow resize) and reports the result. Engine exits immediately after. Useful for debugging image sources.</td>
+    </tr>
+  </table>
+
+  <h4 style="font-size:14px; font-weight:700; margin: 24px 0 10px;">Common usage patterns</h4>
+<pre><span class="cm"># Test everything without posting</span>
+python posting_engine.py --dry-run --once
+
+<span class="cm"># Catch up — post 4 articles right now then exit</span>
+python posting_engine.py --once --posts 4
+
+<span class="cm"># Debug why an image from a Standard Media article isn't working</span>
+python posting_engine.py --test-image https://www.standardmedia.co.ke/images/story.jpg
+
+<span class="cm"># Normal continuous run (default)</span>
+python posting_engine.py</pre>
+</section>
+
+<!-- ═══════════ LOG SCHEMA ═══════════ -->
+<section class="section" id="log">
+  <div class="section-label">Reference</div>
+  <h2>Log File Schema</h2>
+  <p>The engine's state lives in <code>arval_posting_log.json</code>. Understanding this file helps you debug issues and inspect what the engine has been doing.</p>
+
+<pre>{
+  <span class="st">"date"</span>:  <span class="st">"2026-06-21"</span>,        <span class="cm">// resets daily count when it changes</span>
+  <span class="st">"count"</span>: <span class="nu">4</span>,                   <span class="cm">// articles posted today</span>
+
+  <span class="st">"processed_urls"</span>: [           <span class="cm">// max 600 entries; never cleared between days</span>
+    <span class="st">"https://news.google.com/rss/articles/CBMi..."</span>
+  ],
+
+  <span class="st">"posted_titles"</span>: [            <span class="cm">// last 300; used for duplicate detection</span>
+    <span class="st">"KRA Ksh 47 Billion Short: Who Is Keeping The Books?"</span>
+  ],
+
+  <span class="st">"window_counts"</span>: {            <span class="cm">// key = "YYYY-MM-DD_WindowLabel"</span>
+    <span class="st">"2026-06-21_Morning"</span>: <span class="nu">2</span>
+  },
+
+  <span class="st">"quote_cards"</span>: [              <span class="cm">// one per article</span>
+    {
+      <span class="st">"quote"</span>:     <span class="st">"Forty-seven billion missing and nobody has been arrested."</span>,
+      <span class="st">"timestamp"</span>: <span class="st">"2026-06-21T07:14:27"</span>
+    }
+  ],
+
+  <span class="st">"run_stats"</span>: [                <span class="cm">// max 500; per-article stats</span>
+    {
+      <span class="st">"ts"</span>:     <span class="st">"2026-06-21T07:14:27"</span>,
+      <span class="st">"title"</span>:  <span class="st">"KRA Ksh 47 Billion Short: Who Is Keep…"</span>,
+      <span class="st">"words"</span>:  <span class="nu">1063</span>,
+      <span class="st">"model"</span>:  <span class="st">"gemini-3.1-flash-lite"</span>,
+      <span class="st">"image"</span>:  <span class="kw">true</span>,
+      <span class="st">"window"</span>: <span class="st">"Morning"</span>
+    }
+  ]
+}</pre>
+</section>
+
+<!-- ═══════════ TROUBLESHOOT ═══════════ -->
+<section class="section" id="troubleshoot">
+  <div class="section-label">Reference</div>
+  <h2>Troubleshooting</h2>
+
+  <table>
+    <tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr>
+    <tr>
+      <td>Engine exits immediately without scanning</td>
+      <td>Outside posting windows or daily limit full</td>
+      <td>Check <code>autoposter.log</code> for "Outside windows" or "Daily quota full"</td>
+    </tr>
+    <tr>
+      <td>"Recovered from backup log file"</td>
+      <td>Previous write was interrupted mid-file</td>
+      <td>Normal — the backup recovery is working. Delete both log files to reset from scratch if needed.</td>
+    </tr>
+    <tr>
+      <td>All articles posting without images</td>
+      <td>Pillow not installed; all image layers failing</td>
+      <td>Run <code>pip install Pillow</code>; test a specific URL with <code>--test-image</code></td>
+    </tr>
+    <tr>
+      <td>"Gemini refusal detected" on every model</td>
+      <td>Story topic triggering safety filter</td>
+      <td>Normal — engine skips the story and moves to the next candidate</td>
+    </tr>
+    <tr>
+      <td>"Output too short: N words"</td>
+      <td>Gemini returned a partial response or very short refusal</td>
+      <td>Raise <code>MIN_WORD_COUNT</code> to catch more edge cases, or lower it if legitimate short articles are being dropped</td>
+    </tr>
+    <tr>
+      <td>API 401 on every post</td>
+      <td><code>ARVAL_API_KEY</code> wrong or not loaded</td>
+      <td>Check <code>.env</code> file exists in the same directory; verify the key value</td>
+    </tr>
+    <tr>
+      <td>Duplicate articles appearing on the blog</td>
+      <td><code>posted_titles</code> list cleared, or similarity threshold too high</td>
+      <td>Lower <code>SIMILARITY_THRESHOLD</code> from 0.60 toward 0.45</td>
+    </tr>
+    <tr>
+      <td>"Feed returned 0 entries"</td>
+      <td>Feed URL dead or rate-limited</td>
+      <td>Check the feed URL in a browser; remove or replace it from <code>KENYA_FEEDS</code> / <code>WORLD_FEEDS</code></td>
+    </tr>
+    <tr>
+      <td>Posts appearing in wrong category</td>
+      <td>Title doesn't match any keyword in <code>CATEGORY_KEYWORDS</code></td>
+      <td>Add relevant keywords to the appropriate category dict; all falls back to "Politics"</td>
+    </tr>
+  </table>
+
+  <h4 style="font-size:16px; font-weight:700; margin: 28px 0 12px;">Reading the log in real time</h4>
+<pre><span class="cm"># Follow the rotating log file</span>
+tail -f autoposter.log
+
+<span class="cm"># Check today's post count</span>
+python3 -c "import json; d=json.load(open('arval_posting_log.json')); print(d['count'], 'posts today')"
+
+<span class="cm"># See last 5 articles posted</span>
+python3 -c "import json; d=json.load(open('arval_posting_log.json')); [print(s['ts'], s['title'][:60]) for s in d['run_stats'][-5:]]"</pre>
+</section>
+
+</div><!-- /main -->
+
+<footer class="doc-footer">
+  <strong>Arval Blog News — AutoPoster Documentation</strong><br>
+  posting_engine.py · Built for Termux + PythonAnywhere · Kenya 🇰🇪<br>
+  <span style="font-size:12px; margin-top:8px; display:block;">
+    Questions? Check <code>autoposter.log</code> first.
+  </span>
+</footer>
+
+</body>
+</html>
+
